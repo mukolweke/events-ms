@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Support\Facades\App;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Event extends Model
 {
@@ -22,14 +23,19 @@ class Event extends Model
         'description',
         'venue',
         'event_date',
+        'start_date',
+        'end_date',
         'price',
         'max_attendees',
         'is_active',
         'status',
+        'is_public',
     ];
 
     protected $dates = [
         'event_date',
+        'start_date',
+        'end_date',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -37,20 +43,13 @@ class Event extends Model
 
     protected $casts = [
         'event_date' => 'datetime',
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
         'price' => 'decimal:2',
         'is_active' => 'boolean',
+        'is_public' => 'boolean',
         'max_attendees' => 'integer',
     ];
-
-    protected static function booted()
-    {
-        static::addGlobalScope('organization', function (Builder $builder) {
-            $organization = app('currentOrganization');
-            if ($organization) {
-                $builder->where('organization_id', $organization->id);
-            }
-        });
-    }
 
     public function organization(): BelongsTo
     {
@@ -67,6 +66,11 @@ class Event extends Model
         return $query->where('is_active', true);
     }
 
+    public function scopePublic($query)
+    {
+        return $query->where('is_public', true);
+    }
+
     public function scopeUpcoming($query)
     {
         return $query->where('event_date', '>', now());
@@ -75,6 +79,12 @@ class Event extends Model
     public function scopePast($query)
     {
         return $query->where('event_date', '<', now());
+    }
+
+    public function scopeForCurrentOrganization($query)
+    {
+        $organization = app('currentOrganization');
+        return $query->where('organization_id', $organization->id);
     }
 
     public function getIsFullAttribute(): bool
@@ -121,5 +131,10 @@ class Event extends Model
         }
 
         return $this->attendees()->create($data);
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'id';
     }
 }

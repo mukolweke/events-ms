@@ -18,6 +18,7 @@ class Attendee extends Model
         'email',
         'phone',
         'registered_at',
+        'user_id',
     ];
 
     protected $dates = [
@@ -30,21 +31,14 @@ class Attendee extends Model
         'registered_at' => 'datetime',
     ];
 
-    protected static function booted()
-    {
-        static::addGlobalScope('organization', function (Builder $builder) {
-            $organization = app('currentOrganization');
-            if ($organization) {
-                $builder->whereHas('event', function ($query) use ($organization) {
-                    $query->where('organization_id', $organization->id);
-                });
-            }
-        });
-    }
-
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function scopeForEvent($query, $eventId)
@@ -79,5 +73,16 @@ class Attendee extends Model
                 throw new \Exception('Email already registered for this event.');
             }
         });
+    }
+
+    public function scopeForOrganization($query)
+    {
+        $organization = app('currentOrganization');
+        if ($organization) {
+            return $query->join('events', 'attendees.event_id', '=', 'events.id')
+                ->where('events.organization_id', $organization->id)
+                ->select('attendees.*');
+        }
+        return $query;
     }
 }

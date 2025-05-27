@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Organization;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class TenantMiddleware
 {
@@ -28,6 +29,15 @@ class TenantMiddleware
         if (!$organization) {
             Log::warning('Organization not found for slug: ' . $orgSlug);
             throw new NotFoundHttpException('Organization not found.');
+        }
+
+        // Check if user is authenticated and belongs to the organization
+        if ($request->user() && !$organization->users()->where('users.id', $request->user()->id)->exists()) {
+            Log::warning('User does not belong to organization', [
+                'user_id' => $request->user()->id,
+                'organization_id' => $organization->id
+            ]);
+            throw new AccessDeniedHttpException('Unauthorized access');
         }
 
         // Add organization context to request

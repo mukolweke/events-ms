@@ -153,6 +153,7 @@ return [
         // Application Service Providers...
         App\Providers\AppServiceProvider::class,
         App\Providers\TenantServiceProvider::class,
+        App\Providers\RepositoryServiceProvider::class,
     ],
 
 ];
