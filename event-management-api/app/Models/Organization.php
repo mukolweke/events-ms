@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Organization extends Model
 {
@@ -16,6 +17,7 @@ class Organization extends Model
         'slug',
         'domain',
         'settings',
+        'is_active',
     ];
 
     protected $dates = [
@@ -26,6 +28,7 @@ class Organization extends Model
 
     protected $casts = [
         'settings' => 'array',
+        'is_active' => 'boolean',
     ];
 
     public function users(): HasMany
@@ -41,6 +44,30 @@ class Organization extends Model
     public function activityLogs(): HasMany
     {
         return $this->hasMany(ActivityLog::class);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = $value;
+        $this->attributes['slug'] = $this->generateUniqueSlug($value);
+    }
+
+    protected function generateUniqueSlug($name)
+    {
+        $slug = Str::slug($name);
+        $count = 1;
+        $originalSlug = $slug;
+
+        while ($this->where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $count++;
+        }
+
+        return $slug;
     }
 
     public function getRouteKeyName()

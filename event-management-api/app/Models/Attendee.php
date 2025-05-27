@@ -46,4 +46,38 @@ class Attendee extends Model
     {
         return $this->belongsTo(Event::class);
     }
+
+    public function scopeForEvent($query, $eventId)
+    {
+        return $query->where('event_id', $eventId);
+    }
+
+    public function setRegisteredAtAttribute($value)
+    {
+        $this->attributes['registered_at'] = $value ?: now();
+    }
+
+    public static function isEmailUniqueForEvent(string $email, int $eventId): bool
+    {
+        return !static::where('email', $email)
+            ->where('event_id', $eventId)
+            ->exists();
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($attendee) {
+            if (!$attendee->registered_at) {
+                $attendee->registered_at = now();
+            }
+        });
+
+        static::saving(function ($attendee) {
+            if (!$attendee->isEmailUniqueForEvent($attendee->email, $attendee->event_id)) {
+                throw new \Exception('Email already registered for this event.');
+            }
+        });
+    }
 }
