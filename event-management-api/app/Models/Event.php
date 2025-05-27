@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Scope;
+use Illuminate\Support\Facades\App;
 
 class Event extends Model
 {
@@ -35,6 +38,16 @@ class Event extends Model
         'price' => 'decimal:2',
         'is_active' => 'boolean',
     ];
+
+    protected static function booted()
+    {
+        static::addGlobalScope('organization', function (Builder $builder) {
+            $organization = app('currentOrganization');
+            if ($organization) {
+                $builder->where('organization_id', $organization->id);
+            }
+        });
+    }
 
     public function organization(): BelongsTo
     {
