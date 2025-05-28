@@ -44,7 +44,7 @@ php artisan key:generate
 # Run database migrations
 php artisan migrate
 
-# (Optional) Seed the database
+# Seed the database
 php artisan db:seed
 
 # Start Laravel server
