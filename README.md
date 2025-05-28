@@ -86,7 +86,6 @@ npm run dev
 
 ## Uploads
 
-<img width="960" alt="Screenshot 2025-05-28 at 21 11 08" src="https://github.com/user-attachments/assets/4c6ecf66-f32b-4e27-a30d-24572fcab383" />
 <img width="960" alt="Screenshot 2025-05-28 at 21 10 55" src="https://github.com/user-attachments/assets/7f915fff-09fc-4fcf-9456-15cd6365ecba" />
 <img width="960" alt="Screenshot 2025-05-28 at 21 11 16" src="https://github.com/user-attachments/assets/8f11a9c3-eb13-4b21-9bf9-ad618c4f128e" />
 <img width="960" alt="Screenshot 2025-05-28 at 21 11 23" src="https://github.com/user-attachments/assets/e02e34d6-0896-4e1e-a657-ab5dfac1a493" />
