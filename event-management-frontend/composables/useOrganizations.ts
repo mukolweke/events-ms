@@ -35,12 +35,15 @@ export const useOrganizations = () => {
   const { get, post, put, delete: del, loading, error } = useApi()
   const { handleError } = useError()
 
-  const fetchOrganizations = async () => {
+  const fetchAllOrganizations = async () => {
+    await fetchOrganizations(true);
+  }
+
+  const fetchOrganizations = async (all: boolean = false) => {
     try {
-      const response = await get<Organization[]>('/admin/organizations')
-      console.log('API Response:', response)
+      const url = all ? '/admin/organizations?all=true' : '/admin/organizations'
+      const response = await get<Organization[]>(url)
       organizations.value = response.data
-      console.log('Organizations after update:', organizations.value)
       return response.data
     } catch (err) {
       console.error('Error fetching organizations:', err)
@@ -101,6 +104,7 @@ export const useOrganizations = () => {
     currentOrganization,
     loading,
     error,
+    fetchAllOrganizations,
     fetchOrganizations,
     fetchOrganization,
     createOrganization,

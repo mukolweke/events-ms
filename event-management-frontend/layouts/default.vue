@@ -6,7 +6,7 @@
         <div class="flex justify-between h-16">
           <div class="flex">
             <div class="flex-shrink-0 flex items-center">
-              <NuxtLink to="/" class="text-xl font-bold text-indigo-600">
+              <NuxtLink to="/" class="text-xl font-bold text-cyan-600">
                 Event Management
               </NuxtLink>
             </div>
