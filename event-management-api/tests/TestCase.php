@@ -13,8 +13,6 @@ use Illuminate\Support\Facades\Config;
 
 abstract class TestCase extends BaseTestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -28,7 +26,7 @@ abstract class TestCase extends BaseTestCase
         ]);
 
         // Run migrations
-        $this->artisan('migrate:fresh');
+        // $this->artisan('migrate:fresh --seed');
 
         $this->withoutVite();
     }
@@ -38,11 +36,9 @@ abstract class TestCase extends BaseTestCase
         return Organization::factory()->create($attributes);
     }
 
-    protected function createUser(Organization $organization, array $attributes = []): User
+    protected function createUser(array $attributes = []): User
     {
-        return User::factory()->create(array_merge([
-            'organization_id' => $organization->id
-        ], $attributes));
+        return User::factory()->create($attributes);
     }
 
     protected function createEvent(Organization $organization, array $attributes = []): Event

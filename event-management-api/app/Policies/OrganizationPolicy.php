@@ -12,6 +12,6 @@ class OrganizationPolicy
      */
     public function manage(User $user, Organization $organization)
     {
-        return $user->isAdmin() && $user->organization_id === $organization->id;
+        return $user->isAdmin() && $user->organizations()->where('id', $organization->id)->exists();
     }
 }

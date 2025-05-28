@@ -16,6 +16,10 @@ class OrganizationFactory extends Factory
             'slug' => $this->faker->slug,
             'domain' => $this->faker->domainName,
             'settings' => [],
+            'email' => $this->faker->unique()->safeEmail,
+            'phone' => $this->faker->phoneNumber,
+            'address' => $this->faker->address,
+            'description' => $this->faker->paragraph,
         ];
     }
 }

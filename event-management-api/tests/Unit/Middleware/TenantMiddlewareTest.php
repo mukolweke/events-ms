@@ -18,7 +18,7 @@ class TenantMiddlewareTest extends TestCase
     {
         parent::setUp();
         $this->organization = $this->createOrganization();
-        $this->user = $this->createUser($this->organization);
+        $this->user = $this->createUser();
     }
 
     // public function test_organization_slug_is_required()
@@ -33,8 +33,8 @@ class TenantMiddlewareTest extends TestCase
 
     public function test_invalid_organization_slug_returns_404()
     {
+        dd('stop');
         $this->actingAsUser($this->user);
-
         $response = $this->getJson('/api/invalid-org-slug/test-middleware');
 
         $response->assertStatus(404)

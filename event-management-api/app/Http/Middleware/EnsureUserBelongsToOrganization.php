@@ -17,7 +17,10 @@ class EnsureUserBelongsToOrganization
         $user = Auth::user();
         $organization = app('currentOrganization');
 
-        if (!$organization || $user->organization_id !== $organization->id) {
+        if (
+            !$organization ||
+            !$user->organizations()->where('id', $organization->id)->exists()
+        ) {
             return response()->json(['message' => 'Unauthorized access'], 403);
         }
 

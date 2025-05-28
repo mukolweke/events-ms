@@ -14,7 +14,7 @@ class AuthTest extends TestCase
     public function test_user_can_login_with_valid_credentials()
     {
         $organization = $this->createOrganization();
-        $user = $this->createUser($organization, [
+        $user = $this->createUser([
             'password' => 'Password123!'
         ]);
 

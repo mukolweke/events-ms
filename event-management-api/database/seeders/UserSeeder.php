@@ -12,7 +12,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Get the test organization
-        $organization = Organization::where('slug', 'test-org')->first();
+        $organization = Organization::first();
 
         if (!$organization) {
             throw new \Exception('Test organization not found. Please run OrganizationSeeder first.');

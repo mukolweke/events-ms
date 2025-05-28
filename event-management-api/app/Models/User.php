@@ -24,7 +24,6 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'organization_id',
         'name',
         'email',
         'password',
@@ -63,12 +62,7 @@ class User extends Authenticatable
 
     protected static function booted()
     {
-        static::addGlobalScope('organization', function (Builder $builder) {
-            $organization = app('currentOrganization');
-            if ($organization) {
-                $builder->where('organization_id', $organization->id);
-            }
-        });
+        //
     }
 
     public function organizations(): BelongsToMany

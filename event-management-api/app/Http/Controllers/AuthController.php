@@ -19,7 +19,6 @@ class AuthController extends Controller
         // }
 
         $user = User::where('email', $credentials['email'])
-            // ->where('organization_id', $organization->id)
             ->first();
 
         if (!$user || !Auth::attempt($credentials)) {
