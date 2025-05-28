@@ -241,7 +241,6 @@ const {
     createEvent,
     updateEvent,
     deleteEvent,
-    cancelEvent
 } = useEvents()
 
 // Initialize organizationEvents as an empty array
@@ -274,6 +273,11 @@ const eventColumns = [
 ]
 
 const eventActions = [
+    {
+        label: 'Attendees',
+        onClick: (item: Event) => navigateTo(`/admin/organizations/${organization.value?.slug}/event/${item.id}/attendees`),
+        className: 'bg-pink-500 text-white hover:bg-pink-600 focus:ring-pink-500'
+    },
     {
         label: 'View',
         onClick: (item: Event) => openShowEventModal(item),

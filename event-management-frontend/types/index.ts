@@ -49,10 +49,12 @@ export interface Event {
 
 export interface Attendee {
   id: string
-  eventId: string
+  email: string
+  name: string
+  phone: string
   userId: string
   status: 'registered' | 'attended' | 'cancelled'
-  registrationDate: string
+  registration_date: string
   user?: User
   event?: Event
 }

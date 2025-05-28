@@ -22,7 +22,7 @@ class AttendeeResource extends JsonResource
             'status' => $this->status,
             'event_id' => $this->event_id,
             'user_id' => $this->user_id,
-            'registration_date' => $this->registration_date,
+            'registration_date' => $this->registered_at->format('Y-m-d H:i:s'),
             'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

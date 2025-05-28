@@ -31,6 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Event routes
     Route::apiResource('admin/{org_slug}/events', EventController::class)->names('admin.events');
 
+    Route::get('admin/{org_slug}/events/{event}/attendees', [AttendeeController::class, 'index'])->name('attendees.index');
 });
 
 // All other routes require tenant middleware
@@ -66,7 +67,7 @@ Route::middleware([TenantMiddleware::class])->group(function () {
             Route::post('/events/{event}/register', [AttendeeController::class, 'register'])->name('attendees.register');
             Route::delete('/events/{event}/cancel', [AttendeeController::class, 'cancel'])->name('attendees.cancel');
             Route::get('/events/{event}/attendees/export', [AttendeeController::class, 'export'])->name('attendees.export');
-            Route::get('/events/{event}/attendees', [AttendeeController::class, 'index'])->name('attendees.index');
+            // Route::get('/events/{event}/attendees', [AttendeeController::class, 'index'])->name('attendees.index');
         });
     });
 });

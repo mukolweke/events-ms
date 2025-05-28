@@ -48,7 +48,7 @@ class RegistrationService
             $registrationData = array_merge($data, [
                 'event_id' => $eventId,
                 'user_id' => $userId,
-                'registration_date' => now(),
+                'registration_at' => now(),
             ]);
 
             $attendee = $this->attendeeRepository->create($registrationData);

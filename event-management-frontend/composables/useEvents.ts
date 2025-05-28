@@ -1,9 +1,10 @@
-import type { Event, EventRegistrationData, PaginatedResponse } from '~/types'
+import type { Event, EventRegistrationData, PaginatedResponse, Attendee } from '~/types'
 import { useApi } from './useApi'
 
 export const useEvents = () => {
   const api = useApi()
   const events = ref<Event[]>([])
+  const attendees = ref<Attendee[]>([])
   const currentEvent = ref<Event | null>(null)
 
   const fetchEvents = async (params?: { organizationId?: number; organizationSlug?: string; page?: number; limit?: number }) => {
@@ -27,6 +28,23 @@ export const useEvents = () => {
       return response.data
     } catch (error) {
       events.value = []
+      throw error
+    }
+  }
+
+  const fetchAttendees = async (organizationSlug: string, eventId: string) => {
+    try {
+      const response = await api.fetch<PaginatedResponse<Attendee>>(`/admin/${organizationSlug}/events/${eventId}/attendees`, {
+        params: {
+          page: 1,
+          limit: 100
+        }
+      })
+      console.log('API attendees response:', response.data)
+      attendees.value = response.data
+      return response.data
+    } catch (error) {
+      attendees.value = []
       throw error
     }
   }
@@ -104,6 +122,8 @@ export const useEvents = () => {
     deleteEvent,
     registerForEvent,
     loading: api.loading,
-    error: api.error
+    error: api.error,
+    attendees,
+    fetchAttendees,
   }
 }
