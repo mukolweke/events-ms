@@ -6,8 +6,12 @@
       :value="modelValue"
       :placeholder="placeholder"
       :disabled="disabled"
-      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset transition-colors placeholder:text-gray-400 focus:ring-2 focus:ring-inset disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:text-sm sm:leading-6"
+      class="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 transition-colors placeholder:text-gray-400 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:text-sm sm:leading-6"
       :class="[
+        size === 'sm' && 'px-3 py-1.5 text-xs',
+        size === 'md' && 'px-4 py-2',
+        size === 'lg' && 'px-6 py-3 text-base',
+
         error
           ? 'ring-red-300 focus:ring-red-500'
           : 'ring-gray-300 focus:ring-cyan-500',
@@ -43,6 +47,7 @@ defineProps<{
   error?: string
   hint?: string
   disabled?: boolean
+  size?: 'sm' | 'md' | 'lg'
 }>()
 
 defineEmits<{
