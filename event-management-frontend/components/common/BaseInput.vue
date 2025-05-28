@@ -26,7 +26,7 @@
           ? 'ring-red-300 focus:ring-red-500'
           : 'ring-gray-300 focus:ring-cyan-500',
       ]"
-      @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+      @input="handleInput"
     />
     <p v-if="error" class="mt-1 text-sm text-red-600">{{ error }}</p>
     <p v-else-if="hint" class="mt-1 text-sm text-gray-500">{{ hint }}</p>
@@ -34,9 +34,9 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   id: string
-  modelValue: string
+  modelValue: string | number
   type?: string
   label?: string
   placeholder?: string
@@ -46,7 +46,17 @@ defineProps<{
   size?: 'sm' | 'md' | 'lg'
 }>()
 
-defineEmits<{
-  (e: 'update:modelValue', value: string): void
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string | number): void
 }>()
+
+const handleInput = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const value = target.value
+  if (props.type === 'number') {
+    emit('update:modelValue', value === '' ? '' : Number(value))
+  } else {
+    emit('update:modelValue', value)
+  }
+}
 </script>

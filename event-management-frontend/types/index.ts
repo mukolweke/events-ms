@@ -30,25 +30,21 @@ export interface Event {
   id: number
   title: string
   description: string
-  longDescription?: string
-  startDate: string
-  endDate: string
+  venue: string
+  start_date: string
+  end_date: string
   location: string
   image?: string
   organization: Organization
   attendeesCount: number
   isRegistered?: boolean
-  schedule?: Array<{
-    startTime: string
-    endTime: string
-    title: string
-    description: string
-  }>
-  capacity: number
+  max_attendees: number
   price: number
-  organizationId: string
-  createdAt: string
-  updatedAt: string
+  is_active: boolean
+  status?: string
+  organization_id: string
+  created_at: string
+  updated_at: string
 }
 
 export interface Attendee {

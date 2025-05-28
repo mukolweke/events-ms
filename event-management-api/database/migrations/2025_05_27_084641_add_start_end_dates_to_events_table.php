@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->dateTime('start_date')->after('event_date')->nullable();
+            $table->dateTime('start_date')->after('venue')->nullable();
             $table->dateTime('end_date')->after('start_date')->nullable();
 
             // Add index for better query performance

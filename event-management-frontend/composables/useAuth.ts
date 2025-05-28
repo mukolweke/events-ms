@@ -63,11 +63,6 @@ export const useAuth = () => {
       sharedToken.value = response.data.token
       sharedUser.value = response.data.user
 
-      // Set the organization for API calls
-      if (sharedUser.value.organization?.slug) {
-        api.setCurrentOrg(sharedUser.value.organization.slug)
-      }
-
       return { success: true, data: response.data }
     } catch (error: any) {
       return {
@@ -87,11 +82,6 @@ export const useAuth = () => {
       localStorage.setItem('auth_token', response.data.token)
       sharedToken.value = response.data.token
       sharedUser.value = response.data.user
-
-      // Set the organization for API calls
-      if (sharedUser.value.organization?.slug) {
-        api.setCurrentOrg(sharedUser.value.organization.slug)
-      }
 
       return response.data
     } catch (error) {

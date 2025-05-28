@@ -67,4 +67,8 @@ interface EventRepositoryInterface extends BaseRepositoryInterface
      * @return mixed
      */
     public function getUpcomingPublic(int $organizationId);
+
+
+
+    public function getOrganization(string $org_slug);
 }

@@ -93,7 +93,6 @@ import {
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: HomeIcon },
   { name: 'Organizations', href: '/admin/organizations', icon: ListBulletIcon },
-  { name: 'Events', href: '/admin/events', icon: CalendarIcon },
   { name: 'Users', href: '/admin/users', icon: UsersIcon },
   { name: 'Analytics', href: '/admin/analytics', icon: ChartBarIcon },
   { name: 'Settings', href: '/admin/settings', icon: CogIcon },

@@ -27,6 +27,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Organization routes
     Route::apiResource('admin/organizations', OrganizationController::class)->names('admin.organizations');
+
+    // Event routes
+    Route::apiResource('admin/{org_slug}/events', EventController::class)->names('admin.events');
+
 });
 
 // All other routes require tenant middleware

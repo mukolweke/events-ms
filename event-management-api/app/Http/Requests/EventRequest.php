@@ -25,15 +25,12 @@ class EventRequest extends FormRequest
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'venue' => 'required|string|max:255',
-            'event_date' => 'required|date',
             'price' => 'required|numeric|min:0',
-            'max_attendees' => 'required|integer|min:1',
             'is_active' => 'required|boolean',
             'status' => 'nullable|string',
             'start_date' => 'required|date|after:now',
             'end_date' => 'required|date|after:start_date',
-            'location' => 'required|string|max:255',
-            'capacity' => 'required|integer|min:1',
+            'max_attendees' => 'required|integer|min:1',
             'organization_id' => 'required|exists:organizations,id',
         ];
     }

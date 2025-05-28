@@ -21,12 +21,18 @@ class EventController extends Controller
         $this->middleware('auth:sanctum');
     }
 
+    private function getOrganization(Request $request, $org_slug)
+    {
+        return $request->attributes->get('organization') ?? $this->eventService->getOrganization($org_slug);
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(Request $request, $org_slug): AnonymousResourceCollection
     {
-        $organization = $request->attributes->get('organization');
+        $organization = $this->getOrganization($request, $org_slug);
+
         $events = $this->eventService->getUpcomingEvents($organization->id);
         return EventResource::collection($events);
     }
@@ -34,9 +40,9 @@ class EventController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(EventRequest $request): EventResource
+    public function store(EventRequest $request, $org_slug): EventResource
     {
-        $organization = $request->attributes->get('organization');
+        $organization = $this->getOrganization($request, $org_slug);
         $data = array_merge($request->validated(), ['organization_id' => $organization->id]);
         $event = $this->eventService->createEvent($data);
         return new EventResource($event);
@@ -47,7 +53,7 @@ class EventController extends Controller
      */
     public function show(Request $request, $org_slug, Event $event): EventResource
     {
-        $organization = $request->attributes->get('organization');
+        $organization = $this->getOrganization($request, $org_slug);
 
         if ($event->organization_id !== $organization->id) {
             abort(404, 'Event not found');
@@ -62,7 +68,7 @@ class EventController extends Controller
      */
     public function update(EventRequest $request, $org_slug, Event $event): EventResource
     {
-        $organization = $request->attributes->get('organization');
+        $organization = $this->getOrganization($request, $org_slug);
         $data = array_merge($request->validated(), ['organization_id' => $organization->id]);
         $event = $this->eventService->updateEvent($event->id, $data);
         return new EventResource($event);
@@ -89,9 +95,9 @@ class EventController extends Controller
     /**
      * Get past events
      */
-    public function pastEvents(Request $request): AnonymousResourceCollection
+    public function pastEvents(Request $request, $org_slug): AnonymousResourceCollection
     {
-        $organization = $request->attributes->get('organization');
+        $organization = $this->getOrganization($request, $org_slug);
         $events = $this->eventService->getPastEvents($organization->id);
         return EventResource::collection($events);
     }

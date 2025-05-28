@@ -6,6 +6,7 @@ use App\Repositories\Interfaces\OrganizationRepositoryInterface;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 
 class OrganizationService
 {
@@ -39,7 +40,13 @@ class OrganizationService
             $this->validateOrganizationData($data);
 
             Log::info('Creating new organization', ['data' => $data]);
-            return $this->organizationRepository->create($data);
+            $organization = $this->organizationRepository->create($data);
+
+            // Associate the current user with the organization
+            $user = Auth::user();
+            $organization->users()->attach($user->id);
+
+            return $organization;
         } catch (Exception $e) {
             Log::error('Error creating organization: ' . $e->getMessage());
             throw $e;
@@ -147,5 +154,10 @@ class OrganizationService
         if ($validator->fails()) {
             throw new Exception($validator->errors()->first());
         }
+    }
+
+    public function getOrganizationsByUserId(int $userId)
+    {
+        return $this->organizationRepository->getByUserId($userId);
     }
 }

@@ -27,4 +27,12 @@ interface OrganizationRepositoryInterface extends BaseRepositoryInterface
      * @return mixed
      */
     public function getWithMembers(int $id);
+
+    /**
+     * Get organizations by user ID
+     *
+     * @param int $userId
+     * @return mixed
+     */
+    public function getByUserId(int $userId);
 }

@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Event;
+use App\Models\Organization;
 use App\Repositories\Interfaces\EventRepositoryInterface;
 use Carbon\Carbon;
 
@@ -68,6 +69,11 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
         return $this->model->where('organization_id', $organizationId)
                           ->where('is_public', true)
                           ->get();
+    }
+
+    public function getOrganization(string $org_slug)
+    {
+        return Organization::where('slug', $org_slug)->first();
     }
 
     /**

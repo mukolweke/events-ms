@@ -26,4 +26,11 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     {
         return $this->model->with('members')->findOrFail($id);
     }
+
+    public function getByUserId(int $userId)
+    {
+        return $this->model->join('organization_users', 'organizations.id', '=', 'organization_users.organization_id')
+            ->where('organization_users.user_id', $userId)
+            ->get();
+    }
 }

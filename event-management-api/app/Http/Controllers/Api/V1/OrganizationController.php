@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Auth;
 
 class OrganizationController extends BaseController
 {
@@ -25,7 +26,8 @@ class OrganizationController extends BaseController
      */
     public function index(): AnonymousResourceCollection
     {
-        $organizations = $this->organizationService->getAllOrganizations();
+        $userId = Auth::id();
+        $organizations = $this->organizationService->getOrganizationsByUserId($userId);
         return OrganizationResource::collection($organizations);
     }
 

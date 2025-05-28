@@ -22,7 +22,6 @@ class Event extends Model
         'title',
         'description',
         'venue',
-        'event_date',
         'start_date',
         'end_date',
         'price',
@@ -33,7 +32,6 @@ class Event extends Model
     ];
 
     protected $dates = [
-        'event_date',
         'start_date',
         'end_date',
         'created_at',
@@ -42,7 +40,6 @@ class Event extends Model
     ];
 
     protected $casts = [
-        'event_date' => 'datetime',
         'start_date' => 'datetime',
         'end_date' => 'datetime',
         'price' => 'decimal:2',
@@ -73,12 +70,12 @@ class Event extends Model
 
     public function scopeUpcoming($query)
     {
-        return $query->where('event_date', '>', now());
+        return $query->where('start_date', '>', now());
     }
 
     public function scopePast($query)
     {
-        return $query->where('event_date', '<', now());
+        return $query->where('start_date', '<', now());
     }
 
     public function scopeForCurrentOrganization($query)
@@ -103,7 +100,7 @@ class Event extends Model
             return 'inactive';
         }
 
-        if ($this->event_date < now()) {
+        if ($this->end_date < now()) {
             return 'completed';
         }
 
@@ -116,12 +113,12 @@ class Event extends Model
 
     public function setEventDateAttribute($value)
     {
-        $this->attributes['event_date'] = Carbon::parse($value);
+        $this->attributes['start_date'] = Carbon::parse($value);
     }
 
     public function canRegister(): bool
     {
-        return $this->is_active && !$this->isFull && $this->event_date > now();
+        return $this->is_active && !$this->isFull && $this->start_date > now();
     }
 
     public function registerAttendee(array $data): Attendee

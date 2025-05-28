@@ -35,6 +35,11 @@ class EventService
         }
     }
 
+    public function getOrganization(string $org_slug)
+    {
+        return $this->eventRepository->getOrganization($org_slug);
+    }
+
     /**
      * Update an existing event
      *
@@ -191,9 +196,11 @@ class EventService
             'description' => 'required|string',
             'start_date' => 'required|date|after:now',
             'end_date' => 'required|date|after:start_date',
-            'location' => 'required|string|max:255',
-            'capacity' => 'required|integer|min:1',
+            'venue' => 'required|string|max:255',
+            'max_attendees' => 'required|integer|min:1',
             'organization_id' => 'required|exists:organizations,id',
+            'price' => 'required|numeric|min:0',
+            'is_active' => 'required|boolean',
         ]);
 
         if ($validator->fails()) {

@@ -21,7 +21,6 @@ class EventFactory extends Factory
             'title' => $this->faker->sentence(4),
             'description' => $this->faker->paragraph(),
             'venue' => $this->faker->address(),
-            'event_date' => $startDate,
             'start_date' => $startDate,
             'end_date' => $endDate,
             'price' => $this->faker->randomFloat(2, 0, 500),

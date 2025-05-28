@@ -20,7 +20,6 @@ class UserSeeder extends Seeder
 
         DB::table('users')->insert([
             [
-                'organization_id' => $organization->id,
                 'name' => 'Admin User',
                 'email' => 'admin@test.local',
                 'password' => Hash::make('Password123!'),
@@ -30,12 +29,30 @@ class UserSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'organization_id' => $organization->id,
                 'name' => 'Regular User',
                 'email' => 'user@test.local',
                 'password' => Hash::make('Password123!'),
                 'role' => 'user',
                 'email_verified_at' => now(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
+
+        // Associate users with the organization in the pivot table
+        $adminUser = DB::table('users')->where('email', 'admin@test.local')->first();
+        $regularUser = DB::table('users')->where('email', 'user@test.local')->first();
+
+        DB::table('organization_users')->insert([
+            [
+                'user_id' => $adminUser->id,
+                'organization_id' => $organization->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'user_id' => $regularUser->id,
+                'organization_id' => $organization->id,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
