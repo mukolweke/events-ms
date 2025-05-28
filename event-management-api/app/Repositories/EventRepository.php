@@ -26,6 +26,13 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
                            ->get();
     }
 
+    public function getAllUpcoming()
+    {
+        return $this->model->with('organization')
+                        ->where('start_date', '>', Carbon::now())
+                           ->get();
+    }
+
     public function getPast(int $organizationId)
     {
         return $this->model->where('organization_id', $organizationId)

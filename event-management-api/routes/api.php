@@ -29,8 +29,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('admin/organizations', OrganizationController::class)->names('admin.organizations');
 
     // Event routes
+    Route::get('admin/events', [EventController::class, 'allEvents'])->name('admin.events.all');
+    Route::post('admin/{org_slug}/events/{event}/register', [AttendeeController::class, 'register'])->name('attendees.register');
     Route::apiResource('admin/{org_slug}/events', EventController::class)->names('admin.events');
-
+    // Attendee routes
     Route::get('admin/{org_slug}/events/{event}/attendees', [AttendeeController::class, 'index'])->name('attendees.index');
 });
 
@@ -64,10 +66,10 @@ Route::middleware([TenantMiddleware::class])->group(function () {
 
             // Attendee routes
             Route::get('/attendees', [AttendeeController::class, 'listForOrganization'])->name('attendees.list');
-            Route::post('/events/{event}/register', [AttendeeController::class, 'register'])->name('attendees.register');
+
             Route::delete('/events/{event}/cancel', [AttendeeController::class, 'cancel'])->name('attendees.cancel');
             Route::get('/events/{event}/attendees/export', [AttendeeController::class, 'export'])->name('attendees.export');
-            // Route::get('/events/{event}/attendees', [AttendeeController::class, 'index'])->name('attendees.index');
+            Route::get('/events/{event}/attendees', [AttendeeController::class, 'index'])->name('attendees.index');
         });
     });
 });

@@ -39,7 +39,7 @@ class AttendeeController extends Controller
     public function register($org_slug, Event $event): AttendeeResource|\Illuminate\Http\JsonResponse
     {
         try {
-            $userId = request()->user()->id;
+            $userId = request()->get('userId');
             $attendee = $this->registrationService->registerForEvent($event->id, $userId, request()->all());
 
             return new AttendeeResource($attendee);

@@ -73,6 +73,7 @@ export interface RegisterData {
 
 export interface EventRegistrationData {
   eventId: string
+  userId?: number
 }
 
 export interface ApiResponse<T> {

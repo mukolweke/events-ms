@@ -38,6 +38,15 @@ class EventController extends Controller
     }
 
     /**
+     * Get all events.
+     */
+    public function allEvents(Request $request): AnonymousResourceCollection
+    {
+        $events = $this->eventService->getAllUpcomingEvents();
+        return EventResource::collection($events);
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(EventRequest $request, $org_slug): EventResource

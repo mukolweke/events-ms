@@ -7,6 +7,25 @@ export const useEvents = () => {
   const attendees = ref<Attendee[]>([])
   const currentEvent = ref<Event | null>(null)
 
+  const fetchAllEvents = async () => {
+    try {
+      const response = await api.fetch(`/admin/events`)
+
+      // Handle both possible formats with type guards
+      if (response && Array.isArray((response as any).data)) {
+        events.value = (response as any).data
+      } else if (response && (response as any).data && Array.isArray((response as any).data.data)) {
+        events.value = (response as any).data.data
+      } else {
+        events.value = []
+      }
+      return response.data
+    } catch (error) {
+      events.value = []
+      throw error
+    }
+  }
+
   const fetchEvents = async (params?: { organizationId?: number; organizationSlug?: string; page?: number; limit?: number }) => {
     try {
       const response = await api.fetch(`/admin/${params?.organizationSlug}/events`, {
@@ -15,8 +34,7 @@ export const useEvents = () => {
           limit: params?.limit || 10,
         }
       })
-      // Debug log for API response
-      console.log('API events response:', response)
+
       // Handle both possible formats with type guards
       if (response && Array.isArray((response as any).data)) {
         events.value = (response as any).data
@@ -100,9 +118,9 @@ export const useEvents = () => {
     }
   }
 
-  const registerForEvent = async (organizationSlug: string, data: EventRegistrationData) => {
+  const registerForEvent = async (organizationSlug: string, id: number, data: EventRegistrationData) => {
     try {
-      const response = await api.fetch<Event>(`/admin/${organizationSlug}/events/register`, {
+      const response = await api.fetch<Event>(`/admin/${organizationSlug}/events/${id}/register`, {
         method: 'POST',
         body: data
       })
@@ -116,6 +134,7 @@ export const useEvents = () => {
     events,
     currentEvent,
     fetchEvents,
+    fetchAllEvents,
     fetchEventById,
     createEvent,
     updateEvent,

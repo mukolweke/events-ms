@@ -53,21 +53,22 @@
                 :key="event.id"
                 class="bg-white rounded-lg shadow p-6 flex flex-col"
             >
-                <div class="flex items-center space-x-4 mb-4">
-                    <div>
-                        <h2 class="text-lg font-semibold text-gray-900">{{ event.name }}</h2>
-                        <p class="text-sm text-gray-500">{{ event.domain }}</p>
-                    </div>
+                <div class="mb-2">
+                    <h2 class="text-lg font-semibold text-gray-900">{{ event.title }}</h2>
+                    <p class="text-sm text-gray-500">{{ event.venue }}</p>
                 </div>
-                <p class="text-gray-700 flex-1">{{ event.description || 'No description' }}</p>
-                <div class="mt-4">
+                <p class="text-gray-700 flex-1 mb-2">{{ event.description || 'No description' }}</p>
+                <div class="text-xs text-gray-500 mt-4 mb-2 flex flex-col gap-4">
+                    <span class="mr-2">Start: {{ event.start_date }}</span>
+                    <span>End: {{ event.end_date }}</span>
+                </div>
+                <div class="flex justify-between items-center mt-4">
                     <NuxtLink
-                        :to="`/organizations/${event.id}`"
-                        class="text-cyan-600 capitalize hover:underline text-sm font-medium"
+                        :to="`/events/${currentOrganization.slug}/${event.id}`"
+                        class="text-green-600 hover:underline text-sm font-medium"
                     >
-                        View Details
+                        View Event
                     </NuxtLink>
-
                 </div>
             </div>
         </div>

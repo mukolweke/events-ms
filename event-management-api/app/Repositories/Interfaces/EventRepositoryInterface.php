@@ -21,6 +21,13 @@ interface EventRepositoryInterface extends BaseRepositoryInterface
     public function getUpcoming(int $organizationId);
 
     /**
+     * Get upcoming events
+     *
+     * @return mixed
+     */
+    public function getAllUpcoming();
+
+    /**
      * Get past events
      *
      * @param int $organizationId

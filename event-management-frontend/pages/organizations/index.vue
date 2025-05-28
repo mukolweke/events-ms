@@ -45,18 +45,6 @@ import { onMounted } from "vue";
 import Skeleton from '~/components/common/Skeleton.vue'
 import { useOrganizations } from '~/composables/useOrganizations'
 
-interface Organization {
-  id: number
-  name: string
-  slug: string
-  domain: string
-  description: string | null
-  logo: string | null
-  status: string
-  created_at: string
-  updated_at: string | null
-}
-
 const {
   organizations,
   loading,

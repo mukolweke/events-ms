@@ -7,7 +7,8 @@ export default defineNuxtRouteMiddleware((to) => {
   if (
     publicRoutes.includes(to.path) ||
     to.path.startsWith('/organizations/') ||
-    to.path.startsWith('/events/')
+    to.path.startsWith('/events/') ||
+    to.path.startsWith('/all/')
   ) {
     return
   }

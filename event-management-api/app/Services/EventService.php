@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Resources\EventResource;
 use App\Repositories\Interfaces\EventRepositoryInterface;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
@@ -85,6 +86,19 @@ class EventService
     public function getUpcomingEvents(int $organizationId)
     {
         return $this->eventRepository->getUpcoming($organizationId);
+    }
+
+    /**
+     * Get all upcoming events
+     *
+     * @param int $organizationId
+     * @return mixed
+     */
+    public function getAllUpcomingEvents()
+    {
+        $events = $this->eventRepository->getAllUpcoming();
+
+        return EventResource::collection($events);
     }
 
     /**
