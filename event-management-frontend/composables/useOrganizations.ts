@@ -39,9 +39,9 @@ export const useOrganizations = () => {
     await fetchOrganizations(true);
   }
 
-  const fetchOrganizations = async (all: boolean = false) => {
+  const fetchOrganizations = async (publicRoute: boolean = false) => {
     try {
-      const url = all ? '/admin/organizations?all=true' : '/admin/organizations'
+      const url = publicRoute ? '/public/organizations' : '/admin/organizations'
       const response = await get<Organization[]>(url)
       organizations.value = response.data
       return response.data
@@ -52,9 +52,11 @@ export const useOrganizations = () => {
     }
   }
 
-  const fetchOrganization = async (id: number) => {
+  const fetchOrganization = async (id: number, publicRoute: boolean = false) => {
     try {
-      const response = await get<Organization>(`/admin/organizations/${id}`)
+        console.log('Fetching organization with ID:', id, 'Public route:', publicRoute)
+      const url = publicRoute ? '/public/organizations' : '/admin/organizations'
+      const response = await get<Organization>(`${url}/${id}`)
       currentOrganization.value = response.data
       return response.data
     } catch (err) {

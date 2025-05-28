@@ -9,7 +9,7 @@ export const useEvents = () => {
 
   const fetchAllEvents = async () => {
     try {
-      const response = await api.fetch(`/admin/events`)
+      const response = await api.fetch(`/public/events`)
 
       // Handle both possible formats with type guards
       if (response && Array.isArray((response as any).data)) {
@@ -67,11 +67,12 @@ export const useEvents = () => {
     }
   }
 
-  const fetchEventById = async (organizationSlug: string, id: string) => {
+  const fetchEventById = async (organizationSlug: string, id: string, publicRoute: boolean = false) => {
     try {
-      const response = await api.fetch<Event>(`/admin/${organizationSlug}/events/${id}`)
-      currentEvent.value = response.data
-      return response.data
+        let url = !publicRoute ? `/admin` : '/public'
+        const response = await api.fetch<Event>(`${url}/${organizationSlug}/events/${id}`)
+        currentEvent.value = response.data
+        return response.data
     } catch (error) {
       throw error
     }
@@ -118,9 +119,10 @@ export const useEvents = () => {
     }
   }
 
-  const registerForEvent = async (organizationSlug: string, id: number, data: EventRegistrationData) => {
+  const registerForEvent = async (organizationSlug: string, id: number, data: EventRegistrationData, publicRoute: boolean = false) => {
     try {
-      const response = await api.fetch<Event>(`/admin/${organizationSlug}/events/${id}/register`, {
+        let url = !publicRoute ? `/admin` : '/public'
+      const response = await api.fetch<Event>(`${url}/${organizationSlug}/events/${id}/register`, {
         method: 'POST',
         body: data
       })

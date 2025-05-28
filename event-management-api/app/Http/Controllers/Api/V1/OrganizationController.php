@@ -26,11 +26,7 @@ class OrganizationController extends BaseController
      */
     public function index(): AnonymousResourceCollection
     {
-        if (request()->has('all')) {
-            $organizations = $this->organizationService->getAllOrganizations();
-        } else {
-            $organizations = $this->organizationService->getOrganizationsByUserId(Auth::id());
-        }
+        $organizations = $this->organizationService->getOrganizationsByUserId(Auth::id());
 
         return OrganizationResource::collection($organizations);
     }

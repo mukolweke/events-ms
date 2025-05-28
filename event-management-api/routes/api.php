@@ -7,7 +7,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\V1\EventController;
 use App\Http\Controllers\Api\V1\PublicEventController;
 use App\Http\Controllers\Api\V1\AttendeeController;
+use App\Http\Controllers\Api\V1\AttendeePublicController;
+use App\Http\Controllers\Api\V1\EventPublicController;
 use App\Http\Controllers\Api\V1\OrganizationController;
+use App\Http\Controllers\Api\V1\OrganizationPublicController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +22,12 @@ use App\Http\Controllers\Api\V1\OrganizationController;
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:60,1');
 Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:60,1');
 
+Route::get('public/organizations', [OrganizationPublicController::class, 'index'])->name('public.organizations.index');
+Route::get('public/organizations/{id}', [OrganizationPublicController::class, 'show'])->name('public.organizations.show');
+Route::get('public/events', [EventPublicController::class, 'allEvents'])->name('public.events.all');
+Route::get('public/{org_slug}/events/{event}', [EventPublicController::class, 'show'])->name('public.events.show');
+Route::post('public/{org_slug}/events/{event}/register', [AttendeePublicController::class, 'register'])->name('public.attendees.register');
+
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('profile', [AuthController::class, 'profile']);
@@ -27,10 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Organization routes
     Route::apiResource('admin/organizations', OrganizationController::class)->names('admin.organizations');
-
     // Event routes
-    Route::get('admin/events', [EventController::class, 'allEvents'])->name('admin.events.all');
-    Route::post('admin/{org_slug}/events/{event}/register', [AttendeeController::class, 'register'])->name('attendees.register');
     Route::apiResource('admin/{org_slug}/events', EventController::class)->names('admin.events');
     // Attendee routes
     Route::get('admin/{org_slug}/events/{event}/attendees', [AttendeeController::class, 'index'])->name('attendees.index');
@@ -57,7 +63,7 @@ Route::middleware([TenantMiddleware::class])->group(function () {
         // Protected routes (require both tenant and auth)
         Route::middleware(['auth:sanctum', EnsureUserBelongsToOrganization::class])->group(function () {
             // Organization routes
-            Route::apiResource('organizations', OrganizationController::class);
+            // Route::apiResource('organizations', OrganizationController::class)->except(['index', 'show']);
 
             // Event routes
             Route::get('/events/past', [EventController::class, 'pastEvents']);
@@ -69,7 +75,7 @@ Route::middleware([TenantMiddleware::class])->group(function () {
 
             Route::delete('/events/{event}/cancel', [AttendeeController::class, 'cancel'])->name('attendees.cancel');
             Route::get('/events/{event}/attendees/export', [AttendeeController::class, 'export'])->name('attendees.export');
-            Route::get('/events/{event}/attendees', [AttendeeController::class, 'index'])->name('attendees.index');
+            // Route::get('/events/{event}/attendees', [AttendeeController::class, 'index'])->name('attendees.index');
         });
     });
 });
