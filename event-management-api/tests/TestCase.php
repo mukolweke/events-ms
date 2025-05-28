@@ -6,16 +6,31 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use App\Models\User;
 use App\Models\Organization;
 use App\Models\Event;
+use App\Models\Attendee;
 use Laravel\Sanctum\Sanctum;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Config;
 
 abstract class TestCase extends BaseTestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     protected function setUp(): void
     {
         parent::setUp();
+
+        // Force SQLite for testing
+        Config::set('database.default', 'sqlite');
+        Config::set('database.connections.sqlite', [
+            'driver' => 'sqlite',
+            'database' => ':memory:',
+            'prefix' => '',
+        ]);
+
+        // Run migrations
+        $this->artisan('migrate:fresh');
+
+        $this->withoutVite();
     }
 
     protected function createOrganization(array $attributes = []): Organization
@@ -43,8 +58,8 @@ abstract class TestCase extends BaseTestCase
         return $this;
     }
 
-    protected function createAttendee(Event $event, array $attributes = [])
+    protected function createAttendee(array $attributes = []): Attendee
     {
-        return $event->attendees()->create($attributes);
+        return Attendee::factory()->create($attributes);
     }
 }

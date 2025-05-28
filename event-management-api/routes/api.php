@@ -24,6 +24,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('profile', [AuthController::class, 'profile']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
+
+    // Organization routes
+    Route::apiResource('admin/organizations', OrganizationController::class)->names('admin.organizations');
 });
 
 // All other routes require tenant middleware
@@ -39,7 +42,6 @@ Route::middleware([TenantMiddleware::class])->group(function () {
         Route::get('/test-middleware', function () {
             return response()->json(['message' => 'Tenant middleware passed']);
         });
-
         // Public event routes (tenant-specific but no auth required)
         Route::get('/events/public', [PublicEventController::class, 'index']);
         Route::get('/events/public/{id}', [PublicEventController::class, 'show']);

@@ -57,7 +57,7 @@ class OrganizationService
     public function updateOrganization(int $id, array $data)
     {
         try {
-            $this->validateOrganizationData($data);
+            $this->validateOrganizationData($data, $id);
 
             Log::info('Updating organization', ['id' => $id, 'data' => $data]);
             return $this->organizationRepository->update($id, $data);
@@ -122,20 +122,27 @@ class OrganizationService
      * Validate organization data
      *
      * @param array $data
+     * @param int|null $id
      * @throws Exception
      */
-    protected function validateOrganizationData(array $data)
+    protected function validateOrganizationData(array $data, ?int $id = null)
     {
-        $validator = Validator::make($data, [
+        $rules = [
             'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:organizations,slug',
-            'description' => 'required|string',
-            'logo' => 'nullable|string|max:255',
-            'website' => 'nullable|url|max:255',
-            'email' => 'required|email|max:255',
+            'domain' => 'nullable|url|max:255',
+            'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:20',
-            'address' => 'required|string|max:255',
-        ]);
+            'address' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'logo' => 'nullable|string|max:255',
+        ];
+
+        // Only validate slug for new organizations
+        if (!$id) {
+            $rules['slug'] = 'required|string|max:255|unique:organizations,slug';
+        }
+
+        $validator = Validator::make($data, $rules);
 
         if ($validator->fails()) {
             throw new Exception($validator->errors()->first());

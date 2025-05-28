@@ -26,10 +26,10 @@ class OrganizationRequest extends FormRequest
             'slug' => 'required|string|max:255|unique:organizations,slug',
             'description' => 'required|string',
             'logo' => 'nullable|string|max:255',
-            'website' => 'nullable|url|max:255',
-            'email' => 'required|email|max:255',
+            'domain' => 'nullable|url|max:255',
+            'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:20',
-            'address' => 'required|string|max:255',
+            'address' => 'nullable|string|max:255',
         ];
 
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {

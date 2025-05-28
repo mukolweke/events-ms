@@ -49,7 +49,7 @@ export const useApi = () => {
       const authToken = getAuthToken()
 
       // Skip organization prefix for auth routes
-      const isAuthRoute = url.startsWith('/login') || url.startsWith('/register') || url.startsWith('/profile') || url.startsWith('/logout')
+      const isAuthRoute = url.startsWith('/login') || url.startsWith('/register') || url.startsWith('/profile') || url.startsWith('/logout') || url.startsWith('/admin')
       const finalUrl = isAuthRoute ? url : `/${currentOrg.value}${url}`
 
       const response = await $fetch<ApiResponse<T>>(finalUrl, {

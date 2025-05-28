@@ -18,6 +18,10 @@ class Organization extends Model
         'domain',
         'settings',
         'is_active',
+        'email',
+        'phone',
+        'address',
+        'description',
     ];
 
     protected $dates = [
@@ -29,6 +33,10 @@ class Organization extends Model
     protected $casts = [
         'settings' => 'array',
         'is_active' => 'boolean',
+        'email' => 'string',
+        'phone' => 'string',
+        'address' => 'string',
+        'description' => 'string',
     ];
 
     public function users(): HasMany

@@ -46,7 +46,7 @@
             </div>
             <div class="ml-3">
               <p class="text-sm font-medium text-gray-700">Admin User</p>
-              <button class="text-xs font-medium text-gray-500 hover:text-gray-700">
+              <button @click="handleLogout" class="text-xs cursor-pointer font-medium text-gray-500 hover:text-gray-700">
                 Sign out
               </button>
             </div>
@@ -68,7 +68,7 @@
       </div>
       <main class="flex-1">
         <div class="py-6">
-          <div class="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+          <div class="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 py-10 text-[#202028]">
             <slot />
           </div>
         </div>
@@ -78,6 +78,8 @@
 </template>
 
 <script setup lang="ts">
+const { isAuthenticated, logout, user, initializeAuth } = useAuth()
+
 import {
   HomeIcon,
   CalendarIcon,
@@ -96,4 +98,50 @@ const navigation = [
   { name: 'Analytics', href: '/admin/analytics', icon: ChartBarIcon },
   { name: 'Settings', href: '/admin/settings', icon: CogIcon },
 ]
+
+const router = useRouter()
+const route = useRoute()
+
+// Save active navigation to local storage
+const saveActiveNavigation = (path: string) => {
+  if (process.client) {
+    localStorage.setItem('activeNavigation', path)
+  }
+}
+
+// Get active navigation from local storage
+const getActiveNavigation = () => {
+  if (process.client) {
+    return localStorage.getItem('activeNavigation') || '/admin'
+  }
+  return '/admin'
+}
+
+// Watch for route changes to save active navigation
+watch(
+  () => route.path,
+  (newPath) => {
+    saveActiveNavigation(newPath)
+  }
+)
+
+// Redirect if already authenticated
+onMounted(async () => {
+  // Initialize auth state if token exists
+  await initializeAuth()
+
+  if (isAuthenticated.value) {
+    if (user.value?.role === 'admin') {
+      const savedPath = getActiveNavigation()
+      await navigateTo(savedPath, { replace: true })
+    } else {
+      await navigateTo('/', { replace: true })
+    }
+  }
+})
+
+const handleLogout = async () => {
+  await logout()
+  router.push('/login')
+}
 </script>
