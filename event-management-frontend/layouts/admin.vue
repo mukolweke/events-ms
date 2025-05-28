@@ -3,7 +3,7 @@
     <!-- Sidebar -->
     <div class="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
       <div class="flex min-h-0 flex-1 flex-col border-r border-gray-200 bg-white">
-        <div class="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
+        <div class="flex flex-1 flex-col overflow-y-auto pt-15 pb-4">
           <div class="flex flex-shrink-0 items-center px-4">
             <NuxtLink to="/admin" class="text-2xl font-bold text-cyan-600">
               EventHub Admin
@@ -44,8 +44,8 @@
                 alt=""
               />
             </div>
-            <div class="ml-3">
-              <p class="text-sm font-medium text-gray-700">Admin User</p>
+            <div v-if="user" class="ml-3">
+              <p class="text-sm font-medium text-gray-700">{{ user?.name }}</p>
               <button @click="handleLogout" class="text-xs cursor-pointer font-medium text-gray-500 hover:text-gray-700">
                 Sign out
               </button>
@@ -93,9 +93,6 @@ import {
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: HomeIcon },
   { name: 'Organizations', href: '/admin/organizations', icon: ListBulletIcon },
-  { name: 'Users', href: '/admin/users', icon: UsersIcon },
-  { name: 'Analytics', href: '/admin/analytics', icon: ChartBarIcon },
-  { name: 'Settings', href: '/admin/settings', icon: CogIcon },
 ]
 
 const router = useRouter()
