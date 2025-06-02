@@ -65,10 +65,12 @@ export interface LoginCredentials {
 }
 
 export interface RegisterData {
-  email: string
-  password: string
-  firstName: string
-  lastName: string
+  organizationName: string
+  organizationDomain: string
+  adminName: string
+  adminEmail: string
+  adminPassword: string
+  adminPasswordConfirmation: string
 }
 
 export interface EventRegistrationData {

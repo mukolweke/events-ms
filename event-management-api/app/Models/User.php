@@ -29,6 +29,7 @@ class User extends Authenticatable
         'password',
         'role',
         'email_verified_at',
+        'current_organization_id',
     ];
 
     /**
@@ -69,8 +70,14 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(
             Organization::class,
-            'organization_users'
-        )->withTimestamps();
+            'organization_user'
+        )->withPivot('is_owner')
+        ->withTimestamps();
+    }
+
+    public function currentOrganization(): BelongsTo
+    {
+        return $this->belongsTo(Organization::class, 'current_organization_id');
     }
 
     public function scopeAdmin($query)

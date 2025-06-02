@@ -102,6 +102,8 @@
 </template>
 
 <script setup lang="ts">
+import { useAuth } from '../composables/useAuth'
+
 const { currentOrganization: organization } = useOrganizations()
 const { isAuthenticated, logout } = useAuth()
 const router = useRouter()

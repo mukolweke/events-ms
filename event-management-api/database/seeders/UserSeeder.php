@@ -43,7 +43,7 @@ class UserSeeder extends Seeder
         $adminUser = DB::table('users')->where('email', 'admin@test.local')->first();
         $regularUser = DB::table('users')->where('email', 'user@test.local')->first();
 
-        DB::table('organization_users')->insert([
+        DB::table('organization_user')->insert([
             [
                 'user_id' => $adminUser->id,
                 'organization_id' => $organization->id,

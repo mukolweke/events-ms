@@ -5,6 +5,7 @@ import { ref, computed, watch, onMounted } from 'vue'
 // Create shared state outside the composable
 const sharedUser = ref<User | null>(null)
 const sharedToken = ref<string | null>(process.client ? localStorage.getItem('auth_token') : null)
+const orgDomain = ref<string | null> (process.client ? localStorage.getItem('org_domain') : null);
 
 export const useAuth = () => {
   const api = useApi()
@@ -20,6 +21,16 @@ export const useAuth = () => {
         localStorage.setItem('auth_token', newToken)
       } else {
         localStorage.removeItem('auth_token')
+      }
+    }
+  })
+
+  watch(orgDomain, (newDomain) => {
+    if (process.client) {
+      if (newDomain) {
+        localStorage.setItem('org_domain', newDomain)
+      } else {
+        localStorage.removeItem('org_domain')
       }
     }
   })
@@ -52,16 +63,17 @@ export const useAuth = () => {
 
   const login = async (credentials: LoginCredentials) => {
     try {
-      const response = await api.fetch<{ token: string; user: User }>('/login', {
+      const response = await api.fetch<{ token: string; user: User, org_domain: string }>('/login', {
         method: 'POST',
         body: credentials
       })
 
       if (process.client) {
         localStorage.setItem('auth_token', response.data.token)
+        localStorage.setItem('org_domain', response.data.org_domain || '');
+        sharedToken.value = response.data.token
+        sharedUser.value = response.data.user
       }
-      sharedToken.value = response.data.token
-      sharedUser.value = response.data.user
 
       return { success: true, data: response.data }
     } catch (error: any) {
@@ -74,16 +86,19 @@ export const useAuth = () => {
 
   const register = async (data: RegisterData) => {
     try {
-      const response = await api.fetch<{ token: string; user: User }>('/register', {
+      const response = await api.fetch<{ token: string; user: User, org_domain: string }>('/register', {
         method: 'POST',
         body: data
       })
 
-      localStorage.setItem('auth_token', response.data.token)
-      sharedToken.value = response.data.token
-      sharedUser.value = response.data.user
+      if (process.client) {
+        localStorage.setItem('auth_token', response.data.token)
+        localStorage.setItem('org_domain', response.data.org_domain || '');
+        sharedToken.value = response.data.token
+        sharedUser.value = response.data.user
+      }
 
-      return response.data
+      return { success: true, data: response.data }
     } catch (error) {
       throw error
     }

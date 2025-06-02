@@ -22,25 +22,29 @@
         size === 'md' && 'px-4 py-2',
         size === 'lg' && 'px-6 py-3 text-base',
 
-        error
+        errors && errors.length
           ? 'ring-red-300 focus:ring-red-500'
           : 'ring-gray-300 focus:ring-cyan-500',
       ]"
       @input="handleInput"
     />
-    <p v-if="error" class="mt-1 text-sm text-red-600">{{ error }}</p>
+    <p v-if="errors && errors.length" class="mt-1 text-sm text-red-600">
+      {{ errors[0] }}
+    </p>
     <p v-else-if="hint" class="mt-1 text-sm text-gray-500">{{ hint }}</p>
   </div>
 </template>
 
 <script setup lang="ts">
+import { defineProps, defineEmits } from 'vue'
+
 const props = defineProps<{
   id: string
   modelValue: string | number
   type?: string
   label?: string
   placeholder?: string
-  error?: string
+  errors?: string[]
   hint?: string
   disabled?: boolean
   size?: 'sm' | 'md' | 'lg'

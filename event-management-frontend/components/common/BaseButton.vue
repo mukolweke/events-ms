@@ -43,6 +43,7 @@
 
 <script setup lang="ts">
 import LoadingSpinner from './LoadingSpinner.vue'
+import { defineProps } from 'vue'
 
 defineProps<{
   type?: 'button' | 'submit' | 'reset'

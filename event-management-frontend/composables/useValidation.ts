@@ -10,7 +10,7 @@ export function useValidation() {
 
   const validatePassword = (password: string): boolean => {
     // At least 8 characters, 1 uppercase, 1 lowercase, 1 number
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/
     return passwordRegex.test(password)
   }
 
@@ -44,16 +44,23 @@ export function useValidation() {
     return value.length <= max
   }
 
-  const validateForm = (rules: Record<string, any>, data: Record<string, any>) => {
+  // Accept an optional labels map
+  const validateForm = (
+    rules: Record<string, any>,
+    data: Record<string, any>,
+    labels: Record<string, string> = {}
+  ) => {
     errors.value = {}
     let isValid = true
 
     Object.entries(rules).forEach(([field, rule]) => {
       const value = data[field]
       const fieldErrors: string[] = []
+      // Use label if provided, else fallback to field key
+      const label = labels[field] || field
 
       if (rule.required && !validateRequired(value)) {
-        fieldErrors.push(`${field} is required`)
+        fieldErrors.push(`${label} is required`)
       }
 
       if (value) {
@@ -62,7 +69,7 @@ export function useValidation() {
         }
 
         if (rule.password && !validatePassword(value)) {
-          fieldErrors.push('Password must be at least 8 characters with 1 uppercase, 1 lowercase, and 1 number')
+          fieldErrors.push('Password must be at least 8 characters with 1 uppercase, 1 lowercase, and 1 number, and 1 special character')
         }
 
         if (rule.date && !validateDate(value)) {

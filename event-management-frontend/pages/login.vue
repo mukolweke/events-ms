@@ -13,7 +13,7 @@
                         <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
                         <div class="mt-1">
                             <base-input id="email" v-model="form.email" name="email" type="email" autocomplete="email"
-                                placeholder="Enter you email" :error="errors?.value?.email?.[0]" size="md" />
+                                placeholder="Enter you email" :errors="errors.value.email" size="md" />
                         </div>
                     </div>
 
@@ -23,7 +23,7 @@
                         </label>
                         <div class="mt-1">
                             <base-input id="password" v-model="form.password" name="password" type="password"
-                                placeholder="********" :error="errors?.value?.password?.[0]" size="md" />
+                                placeholder="********" :errors="errors.value.password" size="md" />
                         </div>
                     </div>
 
@@ -41,7 +41,7 @@
 
 <script setup lang="ts">
 import type { LoginCredentials } from '~/types'
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, nextTick } from 'vue'
 import { useAuth } from '../composables/useAuth'
 import { useValidation } from '../composables/useValidation'
 import { useRouter } from 'vue-router'
@@ -50,7 +50,7 @@ import BaseButton from '~/components/common/BaseButton.vue'
 import BaseInput from '~/components/common/BaseInput.vue'
 
 const router = useRouter()
-const { login, loading, isAuthenticated, user, getCurrentUser, initializeAuth } = useAuth()
+const { login, loading, isAuthenticated, user, initializeAuth } = useAuth()
 const { validateForm, errors } = useValidation()
 const { handleError } = useError()
 
@@ -61,9 +61,9 @@ onMounted(async () => {
 
   if (isAuthenticated.value) {
     if (user.value?.role === 'admin') {
-      await navigateTo('/admin', { replace: true })
+      await router.push({ path: '/admin', replace: true });
     } else {
-      await navigateTo('/', { replace: true })
+      await router.push({ path: '/', replace: true });
     }
   }
 })
@@ -100,9 +100,9 @@ const handleSubmit = async () => {
 
         // Redirect based on user role
         if (user.value?.role === 'admin') {
-            await navigateTo('/admin', { replace: true })
+            await router.push({ path: '/admin', replace: true });
         } else {
-            await navigateTo('/', { replace: true })
+            await router.push({ path: '/', replace: true });
         }
     } catch (error) {
         handleError(error)

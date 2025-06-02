@@ -42,7 +42,9 @@ class Organization extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'organization_users')->withTimestamps();
+        return $this->belongsToMany(User::class, 'organization_user')
+            ->withPivot('is_owner')
+            ->withTimestamps();
     }
 
     public function events(): HasMany
